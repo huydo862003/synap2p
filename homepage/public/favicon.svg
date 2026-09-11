@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- Two nodes connected by a synapse-like arc -->
+  <!-- Left node -->
+  <circle cx="30" cy="64" r="14" fill="#4a9eff" />
+  <circle cx="30" cy="64" r="8" fill="#1a6fdd" />
+  <!-- Right node -->
+  <circle cx="98" cy="64" r="14" fill="#4a9eff" />
+  <circle cx="98" cy="64" r="8" fill="#1a6fdd" />
+  <!-- Synapse arc (top) -->
+  <path d="M42 58 Q64 28 86 58" stroke="#4a9eff" stroke-width="4" stroke-linecap="round" fill="none" />
+  <!-- Synapse arc (bottom) -->
+  <path d="M42 70 Q64 100 86 70" stroke="#4a9eff" stroke-width="4" stroke-linecap="round" fill="none" />
+  <!-- Signal dots along arcs -->
+  <circle cx="64" cy="38" r="3" fill="#7fbfff" />
+  <circle cx="64" cy="90" r="3" fill="#7fbfff" />
+</svg>

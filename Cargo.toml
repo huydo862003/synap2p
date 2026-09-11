@@ -1,0 +1,13 @@
+[package]
+name = "synap2p"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+description = "Serverless P2P connections via NAT traversal"
+
+[[bin]]
+name = "synap2p"
+path = "src/main.rs"
+
+[profile.release]
+lto = "thin"

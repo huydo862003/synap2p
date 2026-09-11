@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "build": "cargo build --release",
+    "test": "cargo test",
+    "lint": "cargo clippy --workspace -- -D warnings",
+    "lint:fix": "cargo clippy --workspace --fix --allow-dirty",
+    "fmt": "cargo fmt --all",
+    "fmt:check": "cargo fmt --all -- --check",
+    "doc": "pnpm --filter @synap2p/homepage run build",
+    "doc:dev": "pnpm --filter @synap2p/homepage run dev",
+    "doc:preview": "pnpm --filter @synap2p/homepage run preview"
+  }
+}

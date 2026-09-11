@@ -1,0 +1,8 @@
+version: "1.0.0"
+vault:
+  root_dir: "vault"
+repo: "https://github.com/huydo862003/synap2p"
+site:
+  title: "synap2p"
+  description: "Serverless P2P connections via NAT traversal"
+  base_path: "/synap2p"
