@@ -11,5 +11,8 @@
     "doc": "pnpm --filter @synap2p/homepage run build",
     "doc:dev": "pnpm --filter @synap2p/homepage run dev",
     "doc:preview": "pnpm --filter @synap2p/homepage run preview"
+  },
+  "devDependencies": {
+    "typerighter": "0.30.3"
   }
 }
