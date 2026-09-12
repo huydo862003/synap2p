@@ -12,4 +12,15 @@ There can be other more advanced use cases and security for example can be anoth
 
 ## Scope of Project
 
+This is just a short running project - just a PoC out of pure curiosity.
+
+This project only focuses on:
+
+- Research:
+  - A reliable NAT traversal technique over various NAT configurations.
+  - Security for P2P.
+- Deliverable:
+  - A CLI allowing users to selectively/securely connect to each other without a self-hosted server between them.
+  - Based on this connection, the user can talk to each other via some standard API.
+
 ## Research Roadmap
