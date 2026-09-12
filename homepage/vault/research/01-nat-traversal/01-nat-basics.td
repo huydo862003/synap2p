@@ -118,4 +118,68 @@ At each hop, the packet only goes up as far as needed:
 
 At the destination, the process reverses: each layer strips its header and passes the payload up to the layer above, until the application gets the original message.
 
-## Motivation
+## Motivation of NAT
+
+- Every device on the Internet needs an IP address, and as more devices showed up in homes and offices (phones, tablets, TVs, printers, etc.), IPv4's ~4.3 billion addresses simply ran out.
+- IPv6 solves this but adoption is slow (~40-45% as of 2024).
+
+**NAT (Network Address Translation)** is the practical workaround to avoid exhausting the address space.
+
+## Concept and Mechanism of NAT
+
+The idea is simple:
+
+- Instead of giving every device in a home a public IP address, the home router gets a single public IP from the ISP (consumes 1 entry).
+- All devices inside the home use **private IP addresses** (e.g. `10.0.0.x` or `192.168.1.x`) that are only meaningful within the local network.
+- The router then translates between the private addresses and its single public address as traffic flows in and out.
+
+The private address spaces reserved for this purpose (defined in RFC 1918) are:
+
+- `10.0.0.0/8`
+- `172.16.0.0/12`
+- `192.168.0.0/16`
+
+Hundreds of thousands of home networks can all use `10.0.0.0/24` internally without any conflict, because these addresses never appear on the public Internet. NAT is what makes this work.
+
+From the outside world, the entire home network looks like one device with one IP address.
+
+But if every incoming packet has the same destination IP (the router's public address), how does the router know which internal device to forward it to?
+
+### The Translation Table
+
+The router maintains a **NAT translation table** that maps connections using both IP addresses and **port numbers**.
+
+For example, suppose a device at `10.0.0.1` in your home wants to load a web page from a server at `128.119.40.186:80`:
+
+1. The device sends a packet with source `10.0.0.1:3345`, destination `128.119.40.186:80`.
+2. The NAT router intercepts this. It rewrites the source to its own public IP and picks a new port number: `138.76.29.7:5001`. It saves the mapping `138.76.29.7:5001 <-> 10.0.0.1:3345` in the translation table.
+3. The web server receives the request from `138.76.29.7:5001` and replies to that address. It has no idea there's a whole network behind it.
+4. The reply arrives at the router with destination `138.76.29.7:5001`. The router looks up `5001` in the translation table, finds it maps to `10.0.0.1:3345`, rewrites the destination, and forwards the packet to the internal device.
+
+Since port numbers are 16 bits, a single public IP can support over 60,000 simultaneous connections through NAT.
+
+## Implications of NAT
+
+### Pros
+
+NAT let the Internet keep growing despite IPv4 address exhaustion. It gave households a simple way to connect many devices without worrying about IP allocation, and it provides incidental security since devices behind NAT are not directly reachable from the outside.
+
+### Cons
+
+- **Inbound connections don't work**:
+  - NAT only creates table entries when an internal device connects outward.
+  - External hosts can't reach devices behind NAT, because unsolicited inbound packets have no matching entry and get dropped.
+  - Essentially, This is the core problem that **NAT traversal** exists to solve.
+- **Port misuse**:
+  - Ports were designed to identify processes on a host, not hosts behind a router.
+  - NAT repurposes them as host identifiers.
+- **Violates the end-to-end principle**: NAT modifies packets in transit, breaking the idea that hosts should talk directly without intermediaries tampering with their data.
+- **NAT stacking**: ISPs facing their own address shortages deploy **Carrier-Grade NAT (CGNAT)**, adding a second NAT layer (`device -> home NAT -> ISP CGNAT -> Internet`), making traversal even harder.
+
+## Real World Use Cases of NAT
+
+- **Home networks**: A single public IP shared by all household devices. Virtually every consumer router does NAT.
+- **Private/isolated networks**: Organizations use NAT to intentionally hide internal network topology and keep internal addresses unreachable from the outside.
+- **CGNAT**: ISPs (especially mobile carriers and regions with severe IPv4 exhaustion) put subscribers behind an additional NAT layer using `100.64.0.0/10` (RFC 6598).
+- **Cloud**: NAT gateways allow instances with private IPs to reach the Internet without being directly exposed (e.g. AWS NAT Gateway).
+- **Mobile networks**: Nearly all mobile carriers use NAT (often symmetric NAT + CGNAT), which is why P2P connections from mobile devices are particularly hard.
