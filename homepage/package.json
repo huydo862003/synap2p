@@ -7,8 +7,5 @@
     "dev": "typerighter dev",
     "build": "typerighter build",
     "preview": "typerighter preview"
-  },
-  "devDependencies": {
-    "typerighter": "0.30.4"
   }
 }
