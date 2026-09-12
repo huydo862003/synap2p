@@ -118,6 +118,24 @@ At each hop, the packet only goes up as far as needed:
 
 At the destination, the process reverses: each layer strips its header and passes the payload up to the layer above, until the application gets the original message.
 
+### IP Addresses and CIDR
+
+Every device on the Internet is identified by an **IP address**. There are two versions:
+
+- **IPv4**: 32-bit addresses, written as four decimal numbers separated by dots (e.g. `192.168.1.1`). This gives about 4.3 billion possible addresses, which has long been exhausted.
+- **IPv6**: 128-bit addresses, written in hexadecimal groups separated by colons (e.g. `2001:0db8:85a3::8a2e:0370:7334`). This gives a practically unlimited address space (~3.4 × 10³⁸ addresses). Adoption is growing but still incomplete (~40-45% of traffic as of 2024).
+
+IP addresses are organized into **networks** using prefixes. Originally, these were divided into fixed classes (Class A = `/8`, Class B = `/16`, Class C = `/24`), but this was wasteful. **CIDR (Classless Inter-Domain Routing)** replaced this by allowing prefixes at any bit boundary.
+
+CIDR notation looks like `address/prefix_length`:
+
+- The number after `/` says how many leading bits are the network part (fixed), and the remaining bits identify hosts within that network.
+- `10.0.0.0/8` means the first 8 bits are fixed, covering all of `10.x.x.x` (~16.7 million addresses).
+- `192.168.1.0/24` means the first 24 bits are fixed, covering `192.168.1.0` to `192.168.1.255` (256 addresses).
+- You can split at any boundary: `/20`, `/22`, `/27`, whatever fits your needs.
+
+CIDR matters for routing because it lets routers **aggregate** many smaller address blocks into a single prefix. Instead of advertising 16 separate `/24` networks, a router can advertise one `/20` that covers them all. This keeps forwarding tables small and manageable.
+
 ## Motivation of NAT
 
 - Every device on the Internet needs an IP address, and as more devices showed up in homes and offices (phones, tablets, TVs, printers, etc.), IPv4's ~4.3 billion addresses simply ran out.
