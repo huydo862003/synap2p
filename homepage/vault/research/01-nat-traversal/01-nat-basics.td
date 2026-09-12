@@ -87,4 +87,35 @@ Behind the scenes:
 
 ### The TCP/IP Networking Model
 
+The Internet is complex, so its protocols are organized into **layers**: Each layer provides a service to the layer above it and uses the services of the layer below it.
+
+The Internet protocol stack has 5 layers, from top to bottom:
+
+1. **Application**: Where applications and their protocols live (HTTP, SMTP, DNS, FTP). Produces **messages** that need to be sent to another end system.
+
+2. **Transport**: Delivers messages between application endpoints. Two protocols:
+   - **TCP**: Reliable, ordered delivery & connection-oriented.
+   - **UDP**: Unreliable.
+
+3. **Network (IP layer)**: Moves **datagrams** from one host to another. This is where IP addressing, forwarding tables, and routing protocols live. For example, every Internet device with a network layer runs the IP protocol, which is why this layer is often just called "the IP layer".
+
+4. **Link**: Moves **frames** between adjacent nodes (one hop at a time). Different links use different protocols (Ethernet, WiFi, DOCSIS). A single datagram may be handled by different link-layer protocols on different hops.
+
+5. **Physical**: Moves individual **bits** across a single link. Depends on the medium (copper, fiber, radio).
+
+As data moves down the stack, each layer wraps the data from above with its own header. This is **encapsulation**:
+
+- Application produces a message: `M`
+- Transport adds its header: `Ht | M` (segment)
+- Network adds its header: `Hn | Ht | M` (datagram)
+- Link adds its header: `Hl | Hn | Ht | M` (frame)
+- Physical sends the bits
+
+At each hop, the packet only goes up as far as needed:
+
+- **Link-layer switches** only look at layers 1-2 (physical + link). They forward frames based on link-layer addresses (e.g. MAC addresses).
+- **Routers** look at layers 1-3 (physical + link + network). They forward datagrams based on IP addresses.
+
+At the destination, the process reverses: each layer strips its header and passes the payload up to the layer above, until the application gets the original message.
+
 ## Motivation
