@@ -32,20 +32,20 @@ Here's the entire roadmap for this project research. Mostly I will skim it.
 
 This phase focuses on the basic mechanisms that allow peers on the Internet to talk to each other without a dedicated server.
 
-1. [NAT Basics](./01-nat-traversal/01-nat-traversal): What NAT is, why it exists, how mapping tables work
+1. [NAT Basics](./01-nat-traversal/01-nat-basics): What NAT is, why it exists, how mapping tables work
 2. [NAT Types & Behavior](./01-nat-traversal/02-nat-types): The four classic types, RFC 4787 taxonomy, CGNAT, mapping lifetimes, hairpin NAT, mobile networks, IPv6
-3. [NAT Traversal Techniques](./01-nat-traversal/03-nat-traversal-techniques): Overview of approaches: STUN, hole punching, UPnP/NAT-PMP/PCP, ICE, relay
-  1. [STUN Protocol](./01-nat-traversal/04-techniques/01-stun): RFC 8489, message format, XOR-MAPPED-ADDRESS, NAT type detection (RFC 5780), public servers
-  2. [Hole Punching](./01-nat-traversal/04-techniques/02-hole-punching): UDP hole punching, TCP simultaneous open, port prediction for symmetric NAT, CGNAT traversal, timing coordination
-  3. [UPnP / NAT-PMP / PCP](./01-nat-traversal/04-techniques/03-upnp-natpmp-pcp): UPnP IGD, NAT-PMP (RFC 6886), PCP (RFC 6887), detection and fallback strategy
-  4. [ICE Framework](./01-nat-traversal/04-techniques/04-ice): RFC 8445, candidate types, Trickle ICE, ICE-lite, simplified ICE for CLI tools
-  5. [Relay & Fallback](./01-nat-traversal/04-techniques/05-relay-fallback): TURN (RFC 8656), peer relay, DERP-style relay, failure modes, keepalive strategies
+3. [NAT Traversal Techniques](./01-nat-traversal/03-techniques): Overview of approaches: STUN, hole punching, UPnP/NAT-PMP/PCP, ICE, relay
+  1. [STUN Protocol](./01-nat-traversal/03-techniques/01-stun): RFC 8489, message format, XOR-MAPPED-ADDRESS, NAT type detection (RFC 5780), public servers
+  2. [Hole Punching](./01-nat-traversal/03-techniques/02-hole-punching): UDP hole punching, TCP simultaneous open, port prediction for symmetric NAT, CGNAT traversal, timing coordination
+  3. [UPnP / NAT-PMP / PCP](./01-nat-traversal/03-techniques/03-upnp-natpmp-pcp): UPnP IGD, NAT-PMP (RFC 6886), PCP (RFC 6887), detection and fallback strategy
+  4. [ICE Framework](./01-nat-traversal/03-techniques/04-ice): RFC 8445, candidate types, Trickle ICE, ICE-lite, simplified ICE for CLI tools
+  5. [Relay & Fallback](./01-nat-traversal/03-techniques/05-relay-fallback): TURN (RFC 8656), peer relay, DERP-style relay, failure modes, keepalive strategies
 4. Reference Implementations
-  1. [libp2p](./01-nat-traversal/05-references/01-libp2p): AutoNAT, Circuit Relay v2, DCUtR
-  2. [QUIC](./01-nat-traversal/05-references/02-quic): quinn/quiche, connection migration, 0-RTT
-  3. [Magic Wormhole](./01-nat-traversal/05-references/03-magic-wormhole): Mailbox server, PAKE, connection string design
-  4. [Tailscale / WireGuard](./01-nat-traversal/05-references/04-tailscale-wireguard): DERP relay, coordination server, hard NAT handling
-  5. [ZeroTier](./01-nat-traversal/05-references/05-zerotier): Root servers, peer discovery, encrypted protocol
+  1. [libp2p](./01-nat-traversal/04-references/01-libp2p): AutoNAT, Circuit Relay v2, DCUtR
+  2. [QUIC](./01-nat-traversal/04-references/02-quic): quinn/quiche, connection migration, 0-RTT
+  3. [Magic Wormhole](./01-nat-traversal/04-references/03-magic-wormhole): Mailbox server, PAKE, connection string design
+  4. [Tailscale / WireGuard](./01-nat-traversal/04-references/04-tailscale-wireguard): DERP relay, coordination server, hard NAT handling
+  5. [ZeroTier](./01-nat-traversal/04-references/05-zerotier): Root servers, peer discovery, encrypted protocol
 
 ### P2P Security
 
