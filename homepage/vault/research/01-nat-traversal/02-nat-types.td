@@ -26,6 +26,7 @@ Real-world:
 
 This is based on:
 
+- [RFC 2663](https://datatracker.ietf.org/doc/html/rfc2663): NAT Terminology and Considerations (section 4.0 covers the various NAT flavors)
 - [RFC 3489](https://datatracker.ietf.org/doc/html/rfc3489): STUN - Simple Traversal of User Datagram Protocol (origin of the classic four-type taxonomy)
 - [RFC 4787](https://datatracker.ietf.org/doc/html/rfc4787): NAT Behavioral Requirements for Unicast UDP
 - [RFC 6888](https://datatracker.ietf.org/doc/html/rfc6888): Requirements for Carrier-Grade NAT

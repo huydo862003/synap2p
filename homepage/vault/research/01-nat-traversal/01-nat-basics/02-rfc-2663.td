@@ -226,3 +226,7 @@ For each of the above, NAT must update:
 - The accompanying transport header in the payload.
 - The ICMP header checksum.
 - The outer IP header (as with any normal packet).
+
+## Various Flavors of NAT
+
+-> Covered in [NAT Types & Behavior](../02-nat-types).
