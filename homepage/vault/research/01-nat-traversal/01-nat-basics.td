@@ -16,6 +16,8 @@ This section introduces:
 This is based on:
 
 - The book [Computer Networking - A Top-Down Approach](https://ebooks.karbust.me/Technology/Computer%20Networking%20A%20Top-Down%20Approach,%208th%20Edition%20by%20James%20F.%20Kurose,%20Keith%20W.%20Ross-Pearson-9780136681557.pdf) by James Kurose.
+- [RFC 2663](https://datatracker.ietf.org/doc/html/rfc2663): IP Network Address Translator (NAT) Terminology and Considerations (dedicated additional reading)
+- [RFC 3022](https://datatracker.ietf.org/doc/html/rfc3022): Traditional IP Network Address Translator (Traditional NAT) (dedicated additional reading)
 
 ## Background
 
