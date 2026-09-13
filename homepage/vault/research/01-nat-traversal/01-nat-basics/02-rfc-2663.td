@@ -153,3 +153,76 @@ Multiple independent organizations can use the same private ranges simultaneousl
 - An application-specific agent that rewrites payload contents so apps that embed IPs or ports in their payload can work transparently across NAT.
 - Can interact with NAT to set up state, rewrite payload, or do whatever the app needs.
 - Purpose-built for a specific protocol (FTP, SIP, H.323, etc.), rewriting at the address/port level to fix NAT incompatibilities.
+
+## What is NAT?
+
+NAT maps **IP addresses** from **one address realm** to **another**, providing **transparent routing** to **end hosts**.
+
+All NAT devices share three core characteristics:
+
+- **Transparent address assignment**: internal hosts get addresses without manual configuration.
+- **Transparent routing via address translation**: packets are forwarded across realms by rewriting addresses (this is forwarding, not routing protocol exchange).
+- **ICMP error packet payload translation**: ICMP error messages contain the original IP header, so NAT must also rewrite the embedded addresses inside them.
+
+A typical deployment:
+
+1. **Regional Router**: the ISP-side router, connected to the wider Internet.
+2. **WAN link**: connects the regional router to the stub border.
+3. **Stub Router w/NAT**: the border router of the private network. "Stub" means the network has only one exit point to the outside, so all traffic passes through this single router. This is where address translation happens.
+4. **LAN**: the internal network behind the stub router, with private-addressed hosts.
+
+### Step 1: Transparent Address Assignment
+
+- NAT binds private addresses to global addresses (and vice versa) to provide transparent routing.
+- The binding can extend to transport-level identifiers like TCP/UDP ports.
+- Bindings are created at the start of a session.
+
+Two types of address assignment:
+
+1. **Static Address Assignment**:
+  - One-to-one mapping between a private address and an external address, fixed for the lifetime of NAT operation.
+  - NAT doesn't need to manage address assignment per session since the mapping never changes.
+2. **Dynamic Address Assignment**:
+  - External addresses are assigned to private hosts dynamically based on usage.
+  - When the last session using a binding ends, NAT frees it so the address can be recycled.
+  - The exact assignment strategy is implementation-specific.
+
+### Step 2: Transparent Routing
+
+- NAT sits at the border between two address realms and rewrites IP headers so packets route correctly after crossing realms.
+- Must not leak routing information from one realm into another.
+
+Three phases:
+
+1. **Address Binding**:
+  - Maps a local address to an external address at session start.
+    - Static: fixed for the lifetime of NAT.
+    - Dynamic: created on demand, freed when the last session ends.
+  - Multiple sessions from the same host share one binding.
+
+2. **Address Lookup and Translation**:
+  - All packets in a session go through address (and optionally port) lookup and are rewritten before forwarding.
+
+3. **Address Unbinding**:
+  - Binding is released when NAT determines the last session using it has ended (using heuristics).
+
+### Step 3: ICMP Error Packet Translation
+
+ICMP error messages embed the original IP packet in their payload. So when NAT rewrites addresses, it must also fix the embedded IP header inside the ICMP payload.
+
+ICMP types that need NAT modification:
+
+- Destination-Unreachable
+- Source-Quench
+- Time-Exceeded
+- Parameter-Problem
+
+NAT must **not** modify Redirect messages.
+
+For each of the above, NAT must update:
+
+- The embedded IP header addresses in the ICMP payload.
+- The checksum of that embedded IP header.
+- The accompanying transport header in the payload.
+- The ICMP header checksum.
+- The outer IP header (as with any normal packet).
