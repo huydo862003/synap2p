@@ -2,4 +2,4 @@
 _label: "Nat Traversal"
 ---
 
-[[directory-listing]]
+[[directory-index]]

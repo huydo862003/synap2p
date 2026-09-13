@@ -1,6 +1,6 @@
 ---
 _type: Research
-_label: "NAT Basics"
+_label: "NAT Revision"
 _icon: icon.globe
 status: 'draft'
 ---
