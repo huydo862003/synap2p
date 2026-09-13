@@ -70,3 +70,86 @@ Where it breaks down:
   An ALG is a component (usually built into the NAT device) that understands a specific application protocol and rewrites IP addresses inside the payload, not just the header. For example, FTP sends its own IP address in the payload to tell the server where to connect back. Without an ALG, NAT rewrites the header but leaves the payload address untouched, so the server connects to the wrong address. The FTP ALG intercepts this and fixes the payload too.
   :::
 - **IPsec (AH/ESP)** cryptographically protects the IP header from modification, which directly conflicts with what NAT does.
+
+## Terminologies
+
+### Address Realm/Realm
+
+A **network domain** where:
+
+1. Addresses are uniquely assigned  to entities.
+2. Routing protocols in the network allow datagrams can be routed to their destinations.
+
+> As I have stated in ${fref("research/01-nat-traversal/01-nat-basics/01-revision.td")}, a **network** mainly refers to the interconnection topology & routing protocol.
+
+### Transparent Routing
+
+It refers to the **routing** of a datagram between **disparate address realms** by modifying address contents in the IP header to be valid in the destination realm.
+
+Only applies to NATs, not traditional routers.
+
+### Session Flow vs Packet Flow
+
+Directions are defined relative to a **network interface**: **outbound** means leaving the private network toward the external realm, **inbound** means arriving from the external realm.
+
+**Session flow** and **packet flow** are not the same thing:
+
+- **Session flow**: the direction a session was initiated, relative to a network interface.
+
+  For example, a telnet session started from inside the network is an **outbound session flow**.
+- **Packet flow**: the direction individual packets travel, relative to a network interface.
+
+  For example, that same telnet session has both outbound packets (keystrokes) and inbound packets (screen output from the server).
+
+### TU Ports/Server Port/Client Port
+
+TCP/UDP ports associated with an IP address.
+
+- Ports 0-1023 are server ports.
+- Ports 1024-65535 are client ports (by convention, not always followed).
+
+### Session
+
+A contextful communication channel between two devices.
+
+A session is identified by the 5-ary tuple of (protocol, src IP, src port, dst IP, dst port).
+
+-> The NAT's view of a session may not match the application's. (NAT translates the src IP + src port)
+
+#### Start of (TCP/UDP) Session
+
+- **TCP**: first packet with SYN set and ACK absent in the TCP header flags. All subsequent TCP packets must have ACK set.
+- **UDP**: no deterministic signal, as UDP is connection-less (it has no notion of sessions). Heuristic: first packet with a new session tuple.
+
+#### End of Session
+
+- **TCP**: FIN acknowledged by both sides, or RST received by either half.
+  - Nunace: However, NAT can't know whether those segments were actually delivered (they may be dropped and retransmitted), so it can't safely treat them as the final packets. A session is only assumed terminated after 4 minutes following detection (2 \* MSL per RFC 793).
+  - **Silent termination**: a TCP connection can die without NAT knowing (e.g., a peer reboots). NAT needs garbage collection to clean up stale state, but can't distinguish idle connections from dead ones.
+    - **Timeout heuristics**: TCP sessions idle for 24 hours and non-TCP sessions idle for a few minutes are commonly assumed terminated. Timeouts must be configurable since there's no universally correct value, and NAT's idea of termination may not match the application's.
+    - **Alternative**: timestamp entries and evict the longest-idle session when space is needed, rather than relying on fixed timeouts.
+- **UDP**: no signal. Heuristic: idle timeout, typically a few minutes. Must be configurable.
+
+### Public/Global/External Network
+
+Address realm with globally unique addresses assigned by IANA or equivalent.
+
+### Private/Local Network
+
+Address realm independent of external addresses, also called Local Network. A NAT router facilitates transparent routing between the private realm and the external realm.
+
+RFC 1918 reserves three blocks for private internets:
+
+- `10/8` (a single class A network in pre-CIDR terms)
+- `172.16/12` (16 contiguous class B networks)
+- `192.168/16` (256 contiguous class C networks)
+
+Any organization can use these ranges without coordinating with IANA, APNIC, RIPE, or ARIN.
+
+Multiple independent organizations can use the same private ranges simultaneously with no conflict. If they later need to reach each other or the public Internet, they either renumber their networks or enable NAT on their border routers.
+
+### ALG (Application Level Gateway)
+
+- An application-specific agent that rewrites payload contents so apps that embed IPs or ports in their payload can work transparently across NAT.
+- Can interact with NAT to set up state, rewrite payload, or do whatever the app needs.
+- Purpose-built for a specific protocol (FTP, SIP, H.323, etc.), rewriting at the address/port level to fix NAT incompatibilities.
