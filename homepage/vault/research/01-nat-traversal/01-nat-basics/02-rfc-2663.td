@@ -3,6 +3,8 @@ _label: "[Dedicated Reading] RFC 2663: IP Network Address Translator (NAT) Termi
 _icon: icon.globe
 ---
 
+Link RFC 2663: https://www.rfc-editor.org/info/rfc2663/
+
 This is an **informational** IETF RFC, meaning it documents and defines terminology rather than specifying a protocol that implementations must follow. It doesn't mandate anything on its own.
 
 ::: details What are the types of IETF RFCs?
