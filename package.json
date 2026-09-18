@@ -13,6 +13,6 @@
     "doc:preview": "pnpm --filter @synap2p/homepage run preview"
   },
   "devDependencies": {
-    "typerighter": "0.34.2"
+    "typerighter": "0.36.0"
   }
 }
