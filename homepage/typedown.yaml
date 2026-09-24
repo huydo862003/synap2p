@@ -3,6 +3,7 @@ vault:
   root_dir: "vault"
 repo: "https://github.com/huydo862003/synap2p"
 site:
+  origin: "https://huydo862003.github.io"
   title: "synap2p"
   description: "Serverless P2P connections via NAT traversal"
   base_path: "/synap2p"
